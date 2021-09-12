@@ -31,9 +31,6 @@ typedef vector<vii> vvii;
 #define lb lower_bound
 #define ub upper_bound
 #define endl '\n'
-/** ORDERED SET **/
-#define oset tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update>
-#define fkey order_of_key
 
 const int dx[4] = {-1, 0, 1, 0};
 const int dy[4] = {0, -1, 0, 1};
