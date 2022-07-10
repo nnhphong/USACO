@@ -30,31 +30,30 @@ template<class X, class Y>
         } else return false;
     }
 
-const int N = 1e5 + 7, INF = 1e9;
+const int N = 5e2 + 7, INF = 1e9 + 7;
+ 
+int n, a[N], dp[N][N];
+ 
+int DP(int l, int r) {
+	if (l > r) return 0;
+	if (l == r) return a[l];
+	if (dp[l][r] != -1) return dp[l][r];
 
-int n;
-long long m, sum, ans = 1ll * INF * INF;
-long long f[N], s[N];
+	dp[l][r] = 0;
+	for (int k = l; k < r; k++) if (DP(l, k) == DP(k + 1, r)) maximize(dp[l][r], DP(l, k) + 1);
+	return dp[l][r];
+}
 
 int main() {
-	freopen("hayfeast.in", "r", stdin);
-	freopen("hayfeast.out", "w", stdout);
+	freopen("248.in", "r", stdin);
+	freopen("248.out", "w", stdout);
+
+	memset(dp, -1, sizeof dp);
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) scanf("%d", &a[i]);
 	
-	scanf("%d%lld", &n, &m);
-	for (int i = 1; i <= n; i++) scanf("%d%d", &f[i], &s[i]);
-
-	multiset<int> ms;
-
-	int j = 1;
-	for (int i = 1; i <= n; i++) {
-		sum += f[i];
-		ms.insert(s[i]);
-
-		while (sum - f[j] >= m) {
-			sum -= f[j];
-			ms.erase(ms.find(s[j++]));
-		}
-		if (!ms.empty() && sum >= m) minimize(ans, *ms.rbegin());
-	}
-	printf("%lld", ans);
+	int ret = 0;
+	for (int i = 1; i <= n; i++) for (int j = i + 1; j <= n; j++)
+		ret = max(ret, DP(i, j));
+	printf("%d", ret);
 }

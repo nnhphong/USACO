@@ -30,31 +30,27 @@ template<class X, class Y>
         } else return false;
     }
 
-const int N = 1e5 + 7, INF = 1e9;
+const int N = 5e2 + 7, INF = 1e9 + 7;
 
-int n;
-long long m, sum, ans = 1ll * INF * INF;
-long long f[N], s[N];
+int n, dp[N][N], a[N];
+bool avail[N][N];
+
+int DP(int l, int r) {
+	if (l > r) return 0;
+	if (l == r) return 1;
+	if (l + 1 == r) return (a[l] != a[r] ? 2 : 1);
+	if (avail[l][r]) return dp[l][r];
+	avail[l][r] = 1, dp[l][r] = INF;
+
+	for (int k = l; k < r; k++) {
+		if (a[l] == a[r]) minimize(dp[l][r], DP(l, k) + DP(k + 1, r) - 1);
+		else minimize(dp[l][r], DP(l, k) + DP(k + 1, r));
+	}
+	return dp[l][r];
+}
 
 int main() {
-	freopen("hayfeast.in", "r", stdin);
-	freopen("hayfeast.out", "w", stdout);
-	
-	scanf("%d%lld", &n, &m);
-	for (int i = 1; i <= n; i++) scanf("%d%d", &f[i], &s[i]);
-
-	multiset<int> ms;
-
-	int j = 1;
-	for (int i = 1; i <= n; i++) {
-		sum += f[i];
-		ms.insert(s[i]);
-
-		while (sum - f[j] >= m) {
-			sum -= f[j];
-			ms.erase(ms.find(s[j++]));
-		}
-		if (!ms.empty() && sum >= m) minimize(ans, *ms.rbegin());
-	}
-	printf("%lld", ans);
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) scanf("%d", &a[i]);
+	printf("%d", DP(1, n));
 }

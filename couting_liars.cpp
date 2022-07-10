@@ -1,18 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+ 
 using ll = long long;
 using ld = long double;
 using ull = unsigned long long;
 using ii = pair<int, int>;
-
+ 
 #define fi first
 #define se second
+#define pb push_back
 #define numBit(x) (__builtin_popcountll(1ll * (x)))
 #define getBit(x, i) ((x) >> (i) & 1)
 #define sz(x) (int)x.size()
 #define all(x) x.begin(), x.end()
-
+ 
 template<class X, class Y>
 	bool minimize(X &x, const Y &y) {
 	    X eps = 1e-9;
@@ -30,31 +31,34 @@ template<class X, class Y>
         } else return false;
     }
 
-const int N = 1e5 + 7, INF = 1e9;
+const int N = 2e5 + 7, INF = 1e9 + 7;
 
-int n;
-long long m, sum, ans = 1ll * INF * INF;
-long long f[N], s[N];
+int n, p[N];
+char ch[N];
+std::vector<int> v;
 
 int main() {
-	freopen("hayfeast.in", "r", stdin);
-	freopen("hayfeast.out", "w", stdout);
-	
-	scanf("%d%lld", &n, &m);
-	for (int i = 1; i <= n; i++) scanf("%d%d", &f[i], &s[i]);
-
-	multiset<int> ms;
-
-	int j = 1;
+	ios::sync_with_stdio(0); cin.tie(0);
+// #ifndef ONLINE_JUDGE
+// 	freopen("test.inp", "r", stdin);
+// 	freopen("test.out", "w", stdout);
+// #endif
+	cin >> n;
 	for (int i = 1; i <= n; i++) {
-		sum += f[i];
-		ms.insert(s[i]);
-
-		while (sum - f[j] >= m) {
-			sum -= f[j];
-			ms.erase(ms.find(s[j++]));
-		}
-		if (!ms.empty() && sum >= m) minimize(ans, *ms.rbegin());
+		cin >> ch[i] >> p[i];
+		v.pb(p[i]);
 	}
-	printf("%lld", ans);
+
+	sort(all(v)), v.resize(unique(all(v)) - v.begin());
+	for (int i = 1; i <= n; i++) p[i] = lower_bound(all(v), p[i]) - v.begin() + 1;
+
+	int mx = 0;
+	for (int i = 1; i <= n; i++) {
+		int cnt = 0;
+		for (int j = 1; j <= n; j++) 
+			if (ch[j] == 'G') cnt += (i >= p[j]);
+			else cnt += (i <= p[j]);
+		maximize(mx, cnt);
+	}
+	cout << n - mx;
 }

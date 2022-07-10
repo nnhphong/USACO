@@ -8,6 +8,7 @@ using ii = pair<int, int>;
 
 #define fi first
 #define se second
+#define pb push_back
 #define numBit(x) (__builtin_popcountll(1ll * (x)))
 #define getBit(x, i) ((x) >> (i) & 1)
 #define sz(x) (int)x.size()
@@ -30,31 +31,42 @@ template<class X, class Y>
         } else return false;
     }
 
-const int N = 1e5 + 7, INF = 1e9;
+const int N = 1e2 + 7, oo = 1e9 + 7;
 
-int n;
-long long m, sum, ans = 1ll * INF * INF;
-long long f[N], s[N];
+int n, m, a[N], dp[N];
+bool vis[N];
+vector<int> adj[N];
+
+bool canMake(int u) {
+    if (a[u]) {
+        --a[u];
+        return 1;
+    } else if (!sz(adj[u]) && !a[u]) return 0;
+    for (int v: adj[u]) if (!canMake(v))
+        return 0;
+    return 1;
+}
 
 int main() {
-	freopen("hayfeast.in", "r", stdin);
-	freopen("hayfeast.out", "w", stdout);
-	
-	scanf("%d%lld", &n, &m);
-	for (int i = 1; i <= n; i++) scanf("%d%d", &f[i], &s[i]);
-
-	multiset<int> ms;
-
-	int j = 1;
+//#ifndef ONLINE_JUDGE
+// 	freopen("test.inp", "r", stdin);
+// 	freopen("test.out", "w", stdout);
+//#endif
+	scanf("%d", &n);
 	for (int i = 1; i <= n; i++) {
-		sum += f[i];
-		ms.insert(s[i]);
-
-		while (sum - f[j] >= m) {
-			sum -= f[j];
-			ms.erase(ms.find(s[j++]));
-		}
-		if (!ms.empty() && sum >= m) minimize(ans, *ms.rbegin());
+		scanf("%d", &a[i]);
 	}
-	printf("%lld", ans);
+
+	scanf("%d", &m);
+	for (int i = 0, l, x; i < m; i++) {
+		scanf("%d%d", &l, &x);
+		for (int j = 0, t; j < x; j++) {
+			scanf("%d", &t);
+			adj[l].pb(t);
+		}
+	}
+
+    int ans = 0;
+    while (canMake(n)) ++ans;
+    printf("%d", ans);
 }

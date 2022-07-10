@@ -57,7 +57,6 @@ bool isOK(int w) {
 
       if (c >= w) {
         g[u].pb(v);
-//        cout << u << " " << v << endl;
       }
     }
   }
@@ -68,7 +67,6 @@ bool isOK(int w) {
 
   forw(u, 1, n+1)
     if (vis[p[u]] != vis[u]) {
-//      cout << p[u] << " " << u << endl;
       return false;
     }
   return true;
@@ -103,7 +101,6 @@ int main() {
     w[i] = c;
   }
 
-//  cout << isOK(3) << endl << endl;
   sort(all(w));
   int lo = 0, hi = m, ans = -1;
   while (lo <= hi) {
